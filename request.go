@@ -254,6 +254,27 @@ func unmarshalNode(data *Node, model reflect.Value, included *map[string]*Node) 
 			}
 
 			assign(fieldValue, value)
+		} else if annotation == annotationMeta {
+			if data.Meta == nil {
+				continue
+			}
+
+			meta := *data.Meta
+			metaAttribute := meta[args[1]]
+
+			// continue if the metaAttribute was not included in the request
+			if metaAttribute == nil {
+				continue
+			}
+
+			structField := fieldType
+			value, err := unmarshalAttribute(metaAttribute, args, structField, fieldValue)
+			if err != nil {
+				er = err
+				break
+			}
+
+			assign(fieldValue, value)
 		} else if annotation == annotationRelation {
 			isSlice := fieldValue.Type().Kind() == reflect.Slice
 
