@@ -282,6 +282,8 @@ func visitModelNode(model interface{}, included *map[string]*Node,
 			if clientID != "" {
 				node.ClientID = clientID
 			}
+		} else if annotation == annotationMeta {
+			continue
 		} else if annotation == annotationAttribute {
 			var omitEmpty, iso8601 bool
 
